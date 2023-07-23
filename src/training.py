@@ -68,3 +68,14 @@ def train(model, train_json_file_list, valid_json_file_list, learning_rate, epoc
               | Train Accuracy: {total_acc_train / (15600*2): .3f} 
               | Val Loss: {total_loss_val / 15600: .3f} 
               | Val Accuracy: {total_acc_val / 15600: .3f}''') 
+            
+if __name__ == "__main__":
+    from classifer import BertClassifier
+    model_path = '/home/data/zhengyuhu/bert/bert-base-uncased'
+    model = BertClassifier(model_path=model_path)
+    train_json_file_list = ['../data/train.json']
+    valid_json_file_list = ['../data/valid.json']
+    learning_rate = 1e-6
+    epochs = 5
+
+    train(model, train_json_file_list, valid_json_file_list, learning_rate, epochs)
