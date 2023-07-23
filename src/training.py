@@ -79,8 +79,8 @@ if __name__ == "__main__":
     from classifer import BertClassifier
     model_path = '/home/data/zhengyuhu/bert/bert-base-uncased'
     model = BertClassifier(model_path=model_path)
-    train_json_file_list = ['../data/train.json']
-    valid_json_file_list = ['../data/valid.json']
+    train_json_file_list = ['/home/huzhengyu/openlm_folder/github_repo/AI_News_Bert_Classifer/train_data/nyc_0.json', '/home/huzhengyu/openlm_folder/github_repo/AI_News_Bert_Classifer/train_data/nyc_1.json']
+    valid_json_file_list = ['/home/huzhengyu/openlm_folder/github_repo/AI_News_Bert_Classifer/train_data/nyc_2.json']
     learning_rate = 1e-6
     epochs = 5
 

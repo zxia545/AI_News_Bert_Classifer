@@ -4,7 +4,7 @@ from torch.utils.data import Dataset, DataLoader
 import json
 
 # NOTE: Need to change this to the path of the model you want to use
-model_path = 'bert-base-cased'
+model_path = '/home/data/zhengyuhu/bert/bert-base-uncased'
 tokenizer = BertTokenizer.from_pretrained(model_path)
 
 labels = {'abortion': 0, 'the_affordable_care_act': 1, 'stocks_and_bonds': 2, 'music': 3, 'soccer': 4, 'energy_companies': 5, 'golf': 6, 'law_enforcement': 7, 'economy': 8, 'basketball': 9, 'immigration': 10, 'american_football': 11, 'surveillance': 12, 'gay_rights': 13, 'dance': 14, 'hockey': 15, 'international_business': 16, 'environment': 17, 'federal_budget': 18, 'baseball': 19, 'tennis': 20, 'movies': 21, 'tv_show': 22, 'astronomy': 23, 'military': 24, 'gun_control': 25}
@@ -50,7 +50,7 @@ class BertClassiferDataset(Dataset):
         batch_y = self.get_batch_labels(idx)
         return batch_texts, batch_y
 
-def load_bert_classifer_data(dataset_path_list, num_workers=8, batch_size=4, shuffle=True, **kwargs):
+def load_bert_classifer_data(dataset_path_list, num_workers=16, batch_size=4, shuffle=True, **kwargs):
     dataset = BertClassiferDataset(dataset_path_list, **kwargs)
     return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=shuffle)
 
