@@ -8,16 +8,22 @@ def train(model, train_json_file_list, valid_json_file_list, learning_rate, epoc
     train_dataloader = load_bert_classifer_data(train_json_file_list, batch_size=4, shuffle=True)
     val_dataloader = load_bert_classifer_data(valid_json_file_list, batch_size=2, shuffle=True)
     
-  # 判断是否使用GPU
-    use_cuda = torch.cuda.is_available()
-    device = torch.device("cuda" if use_cuda else "cpu")
-    # 定义损失函数和优化器
+    # Device setup
+    device_ids = [7,5,4,3]
+    device = torch.device(f'cuda:{device_ids[0]}' if torch.cuda.is_available() else 'cpu')
+  
+    # Define loss function and optimizer
     criterion = nn.CrossEntropyLoss()
     optimizer = Adam(model.parameters(), lr=learning_rate)
 
-    if use_cuda:
-            model = model.cuda()
-            criterion = criterion.cuda()
+    # If there are multiple GPUs, wrap the model with nn.DataParallel 
+    if torch.cuda.device_count() > 1:
+        print("Let's use", torch.cuda.device_count(), "GPUs!")
+        model = nn.DataParallel(model, device_ids=device_ids)
+  
+    model = model.to(device)
+    criterion = criterion.to(device)
+
     # 开始进入训练循环
     for epoch_num in range(epochs):
       # 定义两个变量，用于存储训练集的准确率和损失
