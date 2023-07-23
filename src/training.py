@@ -1,8 +1,9 @@
 from torch.optim import Adam
-from torch import nn
+from torch import nn, save
 from tqdm import tqdm
 import torch
 from dataloader import load_bert_classifer_data
+from os import path
 
 def train(model, train_json_file_list, valid_json_file_list, learning_rate, epochs):
     train_dataloader = load_bert_classifer_data(train_json_file_list, batch_size=4, shuffle=True)
@@ -74,6 +75,8 @@ def train(model, train_json_file_list, valid_json_file_list, learning_rate, epoc
               | Train Accuracy: {total_acc_train / (15600*2): .3f} 
               | Val Loss: {total_loss_val / 15600: .3f} 
               | Val Accuracy: {total_acc_val / 15600: .3f}''') 
+
+    return save(model.state_dict(), path.join(path.dirname(path.abspath(__file__)), 'bert_classifer.th'))
             
 if __name__ == "__main__":
     from classifer import BertClassifier
