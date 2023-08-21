@@ -89,9 +89,9 @@ class BertClassifierRealDataset(Dataset):
         return batch_texts, batch_y
 
 class BertClassiferDataset(Dataset):
-    def __init__(self, input_json_file_path_list):
-        self.labels = []
-        self.texts = []
+    def __init__(self, input_json_file_path_list, num_items=4000):
+        all_texts = []
+        all_labels = []
 
         for input_json_file_path in input_json_file_path_list:
             f = open(input_json_file_path)
@@ -106,9 +106,16 @@ class BertClassiferDataset(Dataset):
                                     truncation=True,
                                     return_tensors="pt")
                     coverted_label = labels[label_name]
-                    self.texts.append(coverted_text)
-                    self.labels.append(coverted_label)
+                    all_texts.append(coverted_text)
+                    all_labels.append(coverted_label)
+        # Shuffle the data
+        combined = list(zip(all_texts, all_labels))
+        random.shuffle(combined)
+        all_texts[:], all_labels[:] = zip(*combined)
 
+        # Select the first num_items instances
+        self.texts = all_texts[:num_items]
+        self.labels = all_labels[:num_items]
 
     def classes(self):
         return self.labels
@@ -129,8 +136,8 @@ class BertClassiferDataset(Dataset):
         batch_y = self.get_batch_labels(idx)
         return batch_texts, batch_y
 
-def load_bert_classifer_data(dataset_path_list, num_workers=16, batch_size=32, shuffle=True, **kwargs):
-    dataset = BertClassiferDataset(dataset_path_list, **kwargs)
+def load_bert_classifer_data(dataset_path_list, num_workers=16, batch_size=32, shuffle=True, num_item=4000, **kwargs):
+    dataset = BertClassiferDataset(dataset_path_list, num_item, **kwargs)
     return DataLoader(dataset, num_workers=num_workers, batch_size=batch_size, shuffle=shuffle)
 
 def load_bert_classifer_real_data(dataset_path_list, num_workers=16, batch_size=32, shuffle=True, num_item=4000, **kwargs):

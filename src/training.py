@@ -6,11 +6,13 @@ from dataloader import load_bert_classifer_data, load_bert_classifer_real_data
 from os import path
 
 def train(model, train_json_file_list, valid_json_file_list, learning_rate, epochs):
-    train_dataloader = load_bert_classifer_real_data(train_json_file_list, batch_size=32, shuffle=True, num_item=4000)
-    val_dataloader = load_bert_classifer_real_data(valid_json_file_list, batch_size=32, shuffle=True, num_item=200)
+    # train_dataloader = load_bert_classifer_real_data(train_json_file_list, batch_size=32, shuffle=True, num_item=4000)
+    # val_dataloader = load_bert_classifer_real_data(valid_json_file_list, batch_size=32, shuffle=True, num_item=200)
+    train_dataloader = load_bert_classifer_data(train_json_file_list, batch_size=32, shuffle=True, num_item=4000)
+    val_dataloader = load_bert_classifer_data(valid_json_file_list, batch_size=32, shuffle=True, num_item=200)
     
     # Device setup
-    device_ids = [7,5,4,3]
+    device_ids = [7,5,4,3,2]
     device = torch.device(f'cuda:{device_ids[0]}' if torch.cuda.is_available() else 'cpu')
   
     # Define loss function and optimizer
@@ -88,7 +90,9 @@ if __name__ == "__main__":
     from classifer import BertClassifier
     model_path = '/home/data/zhengyuhu/bert/bert-base-uncased'
     model = BertClassifier(model_path=model_path)
-    train_json_file_list = ['/home/huzhengyu/openlm_folder/github_repo/AI_News_Bert_Classifer/train_data/nyt_real/train.jsonl']
+    # train_json_file_list = ['/home/huzhengyu/openlm_folder/github_repo/AI_News_Bert_Classifer/train_data/nyt_real/train.jsonl']
+    # valid_json_file_list = ['/home/huzhengyu/openlm_folder/github_repo/AI_News_Bert_Classifer/train_data/nyt_real/valid.jsonl']
+    train_json_file_list = ['/home/huzhengyu/openlm_folder/github_repo/AI_News_Bert_Classifer/train_data/nyc_0.json', '/home/huzhengyu/openlm_folder/github_repo/AI_News_Bert_Classifer/train_data/nyc_1.json', '/home/huzhengyu/openlm_folder/github_repo/AI_News_Bert_Classifer/train_data/nyc_2.json']
     valid_json_file_list = ['/home/huzhengyu/openlm_folder/github_repo/AI_News_Bert_Classifer/train_data/nyt_real/valid.jsonl']
     learning_rate = 1e-4
     epochs = 6
